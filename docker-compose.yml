@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  # Node.js application service
+  vprodb:
+    build:
+      context: ./Docker-files/db
+    image: drmanawadu/vprofiledb
+    container_name: vprofiledb
+    ports:
+      - "3306:3306"  # Expose port 3306 on the host
+    volumes:
+      - vprodbdata:/var/lib/mysql  # Mount local directory to container
+    environment:
+      MYSQL_ROOT_PASSWORD: vprodbpass
+
+
+  vprocache01:
+    image: memcached
+    ports:
+      - "11211:11211"
+
+  vpromq01:
+    image: rabbitmq
+    ports:
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  vproapp:
+    build:
+      context: ./Docker-files/app
+    image: drmanawadu/vprofileapp
+    container_name: vproapp
+    ports:
+      - "8080:8080"  
+    volumes:
+      - vproappdata:/usr/local/tomcat/webapps
+
+  vproweb:
+    build:
+      context: ./Docker-files/web
+    image: drmanawadu/vprofileweb
+    container_name: vproweb
+    ports:
+      - "80:80"  
+
+volumes:
+  vprodbdata: {}
+  vproappdata: {}
+   
