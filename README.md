@@ -4,6 +4,9 @@
 - Maven 3 or later
 - MySQL 5.6 or later
 
+## EC2 
+Please check Userdata sectio
+
 ### Technologies 
 - Spring MVC
 - Spring Security
